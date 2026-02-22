@@ -100,7 +100,7 @@ public class Intake extends SubsystemBase
 
     public void kickerDown()
     {
-        kicker.setPosition(0.7);
+        kicker.setPosition(0.75);
     }
 
     public void kickerUp()

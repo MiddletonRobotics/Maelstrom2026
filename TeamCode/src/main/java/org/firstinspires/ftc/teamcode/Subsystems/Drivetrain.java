@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.blueReset;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.measurementNoise;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.measurementNoise2;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.processNoise;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.processNoise2;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.redReset;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.startPose;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.blueGoal;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.redGoal;
@@ -189,6 +191,11 @@ public class Drivetrain extends SubsystemBase {
             return follower.getPose().getHeading();
         }
 
+        public double getDistance()
+        {
+            return distance;
+        }
+
         public double getX ()
         {
             return follower.getPose().getX();
@@ -231,6 +238,18 @@ public class Drivetrain extends SubsystemBase {
                 y = Math.pow(follower.getPose().getY() - redGoal.getY(),2);
             }
             distance= Math.sqrt(x+y);
+        }
+
+        public void resetPose(Maelstrom.Alliance color)
+        {
+            if(color.equals(Maelstrom.Alliance.BLUE))
+            {
+                follower.setPose(blueReset);
+            }
+            else
+            {
+                follower.setPose(redReset);
+            }
         }
 
         private static class KalmanFilter {

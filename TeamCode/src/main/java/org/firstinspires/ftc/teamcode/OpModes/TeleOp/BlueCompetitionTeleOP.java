@@ -3,41 +3,33 @@ package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.seattlesolvers.solverslib.command.CommandOpMode;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 import org.firstinspires.ftc.teamcode.Utilities.Storage;
 
 @TeleOp(name="BlueCompetitionTeleOP")
-public class BlueCompetitionTeleOP extends OpMode
+public class BlueCompetitionTeleOP extends CommandOpMode
 {
     private Maelstrom Robot;
-    private Timer loop;
+
 
     @Override
-    public void init()
+    public void initialize()
     {
-        loop= new Timer();
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
-        Robot.dt.enableTeleop();
         telemetry.addData("tempOffset: ", Storage.turretOffset);
         Robot.turret.setManualAngle(0);
-    }
-
-    @Override
-    public void start()
-    {
+        Robot.initializeTeleOP();
         Robot.turret.updateOffset();
         Robot.turret.setPointMode();
-        loop.resetTimer();
     }
 
     @Override
-    public void loop()
+    public void run()
     {
-        Robot.periodic();
-        Robot.controlMap();
-        //telemetry.addData("Loop times: ", loop.getElapsedTime());
-        loop.resetTimer();
+        super.run();
+        telemetry.update();
     }
 }

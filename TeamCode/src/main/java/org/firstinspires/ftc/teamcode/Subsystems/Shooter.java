@@ -154,6 +154,10 @@ public class Shooter extends SubsystemBase {
     {
         flywheelOn=true;
     }
+    public void disableFlywheel()
+    {
+        flywheelOn=false;
+    }
 
     public void setHoodServo(double angle) {
         hoodServo.setPosition(angle);

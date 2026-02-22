@@ -9,12 +9,14 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.seattlesolvers.solverslib.command.CommandOpMode;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants;
+import org.firstinspires.ftc.teamcode.Utilities.Storage;
 
 @TeleOp(name="RedCompetitionTeleOP")
-public class RedCompetitionTeleOP extends OpMode
+public class RedCompetitionTeleOP extends CommandOpMode
 {
 
     private Maelstrom Robot;
@@ -25,26 +27,21 @@ public class RedCompetitionTeleOP extends OpMode
     static FtcDashboard dashboard;
 
     @Override
-    public void init()
+    public void initialize()
     {
-        telemetryManager = PanelsTelemetry.INSTANCE.getTelemetry();
-        dashboard=FtcDashboard.getInstance();
-        telemetryPacket= new TelemetryPacket();
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
-        Robot.dt.enableTeleop();
-        //Robot.turret.setOffsetAngle(0);
-    }
-
-    @Override
-    public void start()
-    {
+        telemetry.addData("tempOffset: ", Storage.turretOffset);
+        Robot.turret.setManualAngle(0);
+        Robot.initializeTeleOP();
         Robot.turret.updateOffset();
-        Robot.turret.startPoseTracking();
+        Robot.turret.setPointMode();
     }
 
     @Override
-    public void loop()
+    public void run()
     {
+        super.run();
+
         Robot.shooter.velocityController.setPIDF(ShooterConstants.kP,ShooterConstants.kI,ShooterConstants.kD,ShooterConstants.kF);
         telemetryManager.addData("Velocity: ", Robot.shooter.currentVelocity);
         telemetryManager.addData("Target: ", Robot.shooter.targetVelocity);
@@ -56,8 +53,6 @@ public class RedCompetitionTeleOP extends OpMode
         dashboard.sendTelemetryPacket(telemetryPacket);
 
         //telemetryManager.update(telemetry);
-        Robot.controlMap();
         telemetry.update();
-        Robot.periodic();
     }
 }
