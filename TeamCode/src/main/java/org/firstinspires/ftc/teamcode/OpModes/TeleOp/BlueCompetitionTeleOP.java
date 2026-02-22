@@ -23,7 +23,7 @@ public class BlueCompetitionTeleOP extends CommandOpMode
         Robot.turret.setManualAngle(0);
         Robot.initializeTeleOP();
         Robot.turret.updateOffset();
-        Robot.turret.setPointMode();
+        Robot.turret.startPoseTracking();
     }
 
     @Override

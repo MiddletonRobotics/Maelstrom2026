@@ -138,7 +138,7 @@ public class Turret extends SubsystemBase
                 motorPower=0;
                 break;
         }
-        motorPower=Math.max(Math.min(motorPower,0.5),-0.5);
+        motorPower=Math.max(Math.min(motorPower,0.6),-0.6);
         turretMotor.set(motorPower);
         setTempOffset(getAngle());
     }

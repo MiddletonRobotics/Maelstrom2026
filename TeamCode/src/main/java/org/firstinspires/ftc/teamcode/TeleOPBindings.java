@@ -18,6 +18,8 @@ import org.firstinspires.ftc.teamcode.Commands.FarShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.ParkCommand;
 import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
 import org.firstinspires.ftc.teamcode.Commands.ShooterDistanceUpdater;
+import org.firstinspires.ftc.teamcode.Commands.TeleOPFarShootCommand;
+import org.firstinspires.ftc.teamcode.Commands.TeleOPShootCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
 import kotlin.time.Instant;
@@ -87,8 +89,8 @@ public class TeleOPBindings
         headingReset.whenPressed(new InstantCommand(()->robot.dt.resetHeading(robot.color)));
         poseReset.whenPressed(new InstantCommand(()->robot.dt.resetPose(robot.color)));
 
-        closeShoot.whenPressed(new ShootCommandV2(robot));
-        farShoot.whenActive(new FarShootCommand(robot));
+        closeShoot.whenPressed(new TeleOPShootCommand(robot));
+        farShoot.whenActive(new TeleOPFarShootCommand(robot));
         parkUp.whenPressed(new InstantCommand(()->robot.dt.parkUp())).whenReleased(new InstantCommand(()->robot.dt.stopPark()));
         parkDown.whenPressed(new InstantCommand(()->robot.dt.parkDown())).whenReleased(new InstantCommand(()->robot.dt.stopPark()));
 

@@ -29,12 +29,16 @@ public class RedCompetitionTeleOP extends CommandOpMode
     @Override
     public void initialize()
     {
+        telemetryManager= PanelsTelemetry.INSTANCE.getTelemetry();
+        dashboard=FtcDashboard.getInstance();
+        telemetryPacket= new TelemetryPacket();
+
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
         telemetry.addData("tempOffset: ", Storage.turretOffset);
         Robot.turret.setManualAngle(0);
         Robot.initializeTeleOP();
         Robot.turret.updateOffset();
-        Robot.turret.setPointMode();
+        Robot.turret.startPoseTracking();
     }
 
     @Override
