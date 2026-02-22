@@ -344,7 +344,7 @@ public class Maelstrom extends Robot
                 }
                 break;
             case 6:
-                if(cTimer.getElapsedTimeSeconds()>0.25)
+                if(cTimer.getElapsedTimeSeconds()>0.35)
                 {
                     intake.kicker2down();
                     intake.stop();
