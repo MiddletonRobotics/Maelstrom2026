@@ -20,7 +20,7 @@ public class ShooterConstants
     public static double closeVelocity=1400;
     public static double farVelocity=2200;
     public static double midVelocity=1700;
-    public static double velocityTolerance=40;
+    public static double velocityTolerance=30;
 
     public static double kP=0.003;
     public static double kI=0;
