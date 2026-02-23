@@ -27,6 +27,6 @@ public class ShooterConstants {
     public static double kF = 0.00037;
 
     // SOTM lead-time LUT: distance (inches) → lead time (seconds)
-    public static double[] leadTimeDistances = { 20, 50, 80, 110, 140 };
-    public static double[] leadTimeValues = { 0.1, 0.2, 0.3, 0.4, 0.5 };
+    public static double[] leadTimeDistances = { 20,40,50,60,70,80,90,130,140,150 };
+    public static double[] leadTimeValues = { 0.1, 0.4,0.535,0.555,0.595,0.74,0.765,0.85,0.86,0.9 };
 }

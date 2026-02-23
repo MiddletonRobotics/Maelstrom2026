@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.Commands.AutoAimTurret;
 import org.firstinspires.ftc.teamcode.Commands.DrivetrainController;
 import org.firstinspires.ftc.teamcode.Commands.FarShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.ParkCommand;
+import org.firstinspires.ftc.teamcode.Commands.SOTMFarShootCommand;
+import org.firstinspires.ftc.teamcode.Commands.SOTMShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
 import org.firstinspires.ftc.teamcode.Commands.ShooterDistanceUpdater;
 import org.firstinspires.ftc.teamcode.Commands.TeleOPFarShootCommand;
@@ -85,8 +87,8 @@ public class TeleOPBindings {
         headingReset.whenPressed(new InstantCommand(() -> robot.dt.resetHeading(robot.color)));
         poseReset.whenPressed(new InstantCommand(() -> robot.dt.resetPose(robot.color)));
 
-        closeShoot.whenPressed(new TeleOPShootCommand(robot));
-        farShoot.whenActive(new TeleOPFarShootCommand(robot));
+        closeShoot.whenPressed(new SOTMShootCommand(robot));
+        farShoot.whenActive(new SOTMFarShootCommand(robot));
         parkUp.whenPressed(new InstantCommand(() -> robot.dt.parkUp()))
                 .whenReleased(new InstantCommand(() -> robot.dt.stopPark()));
         parkDown.whenPressed(new InstantCommand(() -> robot.dt.parkDown()))

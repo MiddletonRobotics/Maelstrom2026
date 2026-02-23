@@ -302,8 +302,8 @@ public class Drivetrain extends SubsystemBase {
         }
 
         double clampedDist = Math.max(Math.min(distance,
-                ShooterConstants.leadTimeDistances[ShooterConstants.leadTimeDistances.length - 1]),
-                ShooterConstants.leadTimeDistances[0]);
+                ShooterConstants.leadTimeDistances[ShooterConstants.leadTimeDistances.length - 1]-1),
+                ShooterConstants.leadTimeDistances[0]+1);
         double leadTime = leadTimeLUT.get(clampedDist);
 
         // Radial compensation: adjust effective distance
