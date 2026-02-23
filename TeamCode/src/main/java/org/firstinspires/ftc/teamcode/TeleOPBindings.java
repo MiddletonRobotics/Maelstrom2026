@@ -24,12 +24,11 @@ import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
 import kotlin.time.Instant;
 
-public class TeleOPBindings
-{
+public class TeleOPBindings {
     private GamepadEx driver1;
     private GamepadEx driver2;
 
-    //Driver 1
+    // Driver 1
     public Button headingReset;
     public Button poseReset;
     public Button closeShoot;
@@ -41,8 +40,7 @@ public class TeleOPBindings
     public Button park3;
     public Button park4;
 
-
-    //Driver 2
+    // Driver 2
     public Trigger intakeIn;
     public Trigger intakeOut;
     public Button kickerUp;
@@ -55,55 +53,59 @@ public class TeleOPBindings
 
     private Maelstrom robot;
 
-    public TeleOPBindings(GamepadEx driver1, GamepadEx driver2, Maelstrom robot)
-    {
-        this.robot=robot;
-        this.driver1=driver1;
-        this.driver2=driver2;
+    public TeleOPBindings(GamepadEx driver1, GamepadEx driver2, Maelstrom robot) {
+        this.robot = robot;
+        this.driver1 = driver1;
+        this.driver2 = driver2;
 
-        headingReset= new GamepadButton(driver1, GamepadKeys.Button.TOUCHPAD);
-        poseReset= new GamepadButton(driver1, GamepadKeys.Button.RIGHT_STICK_BUTTON);
-        closeShoot= new GamepadButton(driver1, GamepadKeys.Button.RIGHT_BUMPER);
-        farShoot= new Trigger(()-> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>0.5);
-        parkUp= new GamepadButton(driver1, GamepadKeys.Button.A);
-        parkDown= new GamepadButton(driver1, GamepadKeys.Button.B);
-        park1= new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP);
-        park2= new GamepadButton(driver1, GamepadKeys.Button.DPAD_LEFT);
-        park3= new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN);
-        park4= new GamepadButton(driver1, GamepadKeys.Button.DPAD_RIGHT);
+        headingReset = new GamepadButton(driver1, GamepadKeys.Button.TOUCHPAD);
+        poseReset = new GamepadButton(driver1, GamepadKeys.Button.RIGHT_STICK_BUTTON);
+        closeShoot = new GamepadButton(driver1, GamepadKeys.Button.RIGHT_BUMPER);
+        farShoot = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5);
+        parkUp = new GamepadButton(driver1, GamepadKeys.Button.A);
+        parkDown = new GamepadButton(driver1, GamepadKeys.Button.B);
+        park1 = new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP);
+        park2 = new GamepadButton(driver1, GamepadKeys.Button.DPAD_LEFT);
+        park3 = new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN);
+        park4 = new GamepadButton(driver1, GamepadKeys.Button.DPAD_RIGHT);
 
-        intakeIn= new Trigger(()-> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>0.5);
-        intakeOut= new Trigger(()-> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0.5);
-        kickerUp= new GamepadButton(driver2, GamepadKeys.Button.DPAD_RIGHT);
-        gateUp= new GamepadButton(driver2, GamepadKeys.Button.DPAD_UP);
-        flyWheelOn= new GamepadButton(driver2, GamepadKeys.Button.RIGHT_BUMPER);
-        flyWheelOff= new GamepadButton(driver2, GamepadKeys.Button.LEFT_BUMPER);
-        closeVelocity= new GamepadButton(driver2, GamepadKeys.Button.B);
-        midVelocity= new GamepadButton(driver2, GamepadKeys.Button.X);
-        farVelocity= new GamepadButton(driver2, GamepadKeys.Button.Y);
+        intakeIn = new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5);
+        intakeOut = new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5);
+        kickerUp = new GamepadButton(driver2, GamepadKeys.Button.DPAD_RIGHT);
+        gateUp = new GamepadButton(driver2, GamepadKeys.Button.DPAD_UP);
+        flyWheelOn = new GamepadButton(driver2, GamepadKeys.Button.RIGHT_BUMPER);
+        flyWheelOff = new GamepadButton(driver2, GamepadKeys.Button.LEFT_BUMPER);
+        closeVelocity = new GamepadButton(driver2, GamepadKeys.Button.B);
+        midVelocity = new GamepadButton(driver2, GamepadKeys.Button.X);
+        farVelocity = new GamepadButton(driver2, GamepadKeys.Button.Y);
     }
 
-    public void controlMap()
-    {
-        //Driver1
-        headingReset.whenPressed(new InstantCommand(()->robot.dt.resetHeading(robot.color)));
-        poseReset.whenPressed(new InstantCommand(()->robot.dt.resetPose(robot.color)));
+    public void controlMap() {
+        // Driver1
+        headingReset.whenPressed(new InstantCommand(() -> robot.dt.resetHeading(robot.color)));
+        poseReset.whenPressed(new InstantCommand(() -> robot.dt.resetPose(robot.color)));
 
         closeShoot.whenPressed(new TeleOPShootCommand(robot));
         farShoot.whenActive(new TeleOPFarShootCommand(robot));
-        parkUp.whenPressed(new InstantCommand(()->robot.dt.parkUp())).whenReleased(new InstantCommand(()->robot.dt.stopPark()));
-        parkDown.whenPressed(new InstantCommand(()->robot.dt.parkDown())).whenReleased(new InstantCommand(()->robot.dt.stopPark()));
+        parkUp.whenPressed(new InstantCommand(() -> robot.dt.parkUp()))
+                .whenReleased(new InstantCommand(() -> robot.dt.stopPark()));
+        parkDown.whenPressed(new InstantCommand(() -> robot.dt.parkDown()))
+                .whenReleased(new InstantCommand(() -> robot.dt.stopPark()));
 
-        park1.whenPressed(new ParkCommand(robot,robot.dt::getPose,blueCorner1),true);
-        park2.whenPressed(new ParkCommand(robot,robot.dt::getPose,blueCorner2),true);
-        park3.whenPressed(new ParkCommand(robot,robot.dt::getPose,blueCorner3),true);
-        park4.whenPressed(new ParkCommand(robot,robot.dt::getPose,blueCorner4),true);
+        park1.whenPressed(new ParkCommand(robot, robot.dt::getPose, blueCorner1), true);
+        park2.whenPressed(new ParkCommand(robot, robot.dt::getPose, blueCorner2), true);
+        park3.whenPressed(new ParkCommand(robot, robot.dt::getPose, blueCorner3), true);
+        park4.whenPressed(new ParkCommand(robot, robot.dt::getPose, blueCorner4), true);
 
-        //Driver 2
-        intakeIn.whenActive(new InstantCommand(robot.intake::spinIn)).whenInactive(new InstantCommand(robot.intake::stop));
-        intakeOut.whenActive(new InstantCommand(robot.intake::spinOut)).whenInactive(new InstantCommand(robot.intake::stop));
-        kickerUp.whenPressed(new InstantCommand(robot.intake::kicker2Up)).whenReleased(new InstantCommand(robot.intake::kicker2down));
-        gateUp.whenPressed(new InstantCommand(robot.intake::kickerUp)).whenReleased(new InstantCommand(robot.intake::kickerDown));
+        // Driver 2
+        intakeIn.whenActive(new InstantCommand(robot.intake::spinIn))
+                .whenInactive(new InstantCommand(robot.intake::stop));
+        intakeOut.whenActive(new InstantCommand(robot.intake::spinOut))
+                .whenInactive(new InstantCommand(robot.intake::stop));
+        kickerUp.whenPressed(new InstantCommand(robot.intake::kicker2Up))
+                .whenReleased(new InstantCommand(robot.intake::kicker2down));
+        gateUp.whenPressed(new InstantCommand(robot.intake::kickerUp))
+                .whenReleased(new InstantCommand(robot.intake::kickerDown));
         flyWheelOn.whenPressed(new InstantCommand(robot.shooter::enableFlywheel));
         flyWheelOff.whenPressed(new InstantCommand(robot.shooter::disableFlywheel));
         closeVelocity.whenPressed(new InstantCommand(robot.shooter::shootClose));
@@ -111,11 +113,11 @@ public class TeleOPBindings
         farVelocity.whenPressed(new InstantCommand(robot.shooter::shootFar));
     }
 
-    public void configureDefaultCommands()
-    {
-        robot.dt.setDefaultCommand(new DrivetrainController(robot,driver1::getLeftX, driver1::getLeftY, driver1::getRightX));
-        robot.turret.setDefaultCommand(new AutoAimTurret(robot,robot.dt::getPose));
-        robot.shooter.setDefaultCommand(new ShooterDistanceUpdater(robot,robot.dt::getDistance));
+    public void configureDefaultCommands() {
+        robot.dt.setDefaultCommand(
+                new DrivetrainController(robot, driver1::getLeftX, driver1::getLeftY, driver1::getRightX));
+        robot.turret.setDefaultCommand(new AutoAimTurret(robot, robot.dt::getPose));
+        robot.shooter.setDefaultCommand(new ShooterDistanceUpdater(robot));
     }
 
 }
