@@ -38,7 +38,7 @@ public class TurretConstants {
     public static Pose redGoal = blueGoal.mirror();
 
     // SOTM: minimum speed (in/s) before compensation activates
-    public static double velocityThreshold = 2.0;
+    public static double velocityThreshold = 1.0;
 
     // SOTM: compensated goals (updated every loop by Drivetrain)
     public static Pose compensatedBlueGoal = blueGoal;
