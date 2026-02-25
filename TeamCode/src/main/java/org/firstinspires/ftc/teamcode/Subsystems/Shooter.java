@@ -204,6 +204,12 @@ public class Shooter extends SubsystemBase {
         hoodAngle=hoodTable.get(vel);
     }
 
+    public void updateCommand(double dist)
+    {
+        updateDistance(dist);
+        shootAutoVelocity();
+    }
+
     public void toggleAuto()
     {
         useAuto=!useAuto;

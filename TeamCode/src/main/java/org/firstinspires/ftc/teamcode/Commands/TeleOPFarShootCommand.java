@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelDeadlineGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -37,6 +38,6 @@ public class TeleOPFarShootCommand extends SequentialCommandGroup
                 new InstantCommand(intake::stop),
                 new InstantCommand(intake::kickerDown)
         );
-        addRequirements(intake,shooter);
+        addRequirements(intake);
     }
 }

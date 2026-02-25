@@ -36,6 +36,6 @@ public class TeleOPShootCommand extends SequentialCommandGroup
                 new InstantCommand(intake::stop),
                 new InstantCommand(intake::kickerDown)
         );
-        addRequirements(intake,shooter);
+        addRequirements(intake);
     }
 }
