@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.Subsystems.Maelstrom.blueCorner3;
 import static org.firstinspires.ftc.teamcode.Subsystems.Maelstrom.blueCorner4;
 
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Button;
 import com.seattlesolvers.solverslib.command.button.GamepadButton;
 import com.seattlesolvers.solverslib.command.button.Trigger;
@@ -87,8 +88,8 @@ public class TeleOPBindings {
         headingReset.whenPressed(new InstantCommand(() -> robot.dt.resetHeading(robot.color)));
         poseReset.whenPressed(new InstantCommand(() -> robot.dt.resetPose(robot.color)));
 
-        closeShoot.whenPressed(new SOTMShootCommand(robot));
-        farShoot.whenActive(new SOTMFarShootCommand(robot));
+        closeShoot.whenPressed(new TeleOPShootCommand(robot));
+        farShoot.whenActive(new TeleOPFarShootCommand(robot));
         parkUp.whenPressed(new InstantCommand(() -> robot.dt.parkUp()))
                 .whenReleased(new InstantCommand(() -> robot.dt.stopPark()));
         parkDown.whenPressed(new InstantCommand(() -> robot.dt.parkDown()))
@@ -119,7 +120,7 @@ public class TeleOPBindings {
         robot.dt.setDefaultCommand(
                 new DrivetrainController(robot, driver1::getLeftX, driver1::getLeftY, driver1::getRightX));
         robot.turret.setDefaultCommand(new AutoAimTurret(robot, robot.dt::getPose));
-        robot.shooter.setDefaultCommand(new ShooterDistanceUpdater(robot));
+        //robot.shooter.setDefaultCommand(new ShooterDistanceUpdater(robot));
     }
 
 }

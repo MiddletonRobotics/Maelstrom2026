@@ -37,6 +37,7 @@ public class Shooter extends SubsystemBase {
     public double targetVelocity;
     public double autoVelocity;
     public boolean flywheelOn;
+    public boolean shooting;
     public boolean useAuto = false;
     private double distance = 1;
     public PIDFController velocityController = new PIDFController(kP, kI, kD, ShooterConstants.kF);
@@ -74,17 +75,24 @@ public class Shooter extends SubsystemBase {
         hoodTable.createLUT();
 
         flywheelOn = false;
+        shooting = false;
         targetVelocity = ShooterConstants.closeVelocity; // start with some default
     }
 
     @Override
     public void periodic() {
+        updateDistance(Drivetrain.compensatedDistance);
         updateAutoVelocity();
         autoHood();
         if (useAuto) {
             // shootAutoVelocity();
         }
         setHood(hoodAngle);
+
+        if(shooting)
+        {
+            shootAutoVelocity();
+        }
 
         // Update shooter velocity
         if (flywheelOn) {
@@ -210,6 +218,16 @@ public class Shooter extends SubsystemBase {
 
     public void toggleAuto() {
         useAuto = !useAuto;
+    }
+
+    public void enableShooting()
+    {
+        shooting=true;
+    }
+
+    public void disableShooting()
+    {
+        shooting=false;
     }
 
 }

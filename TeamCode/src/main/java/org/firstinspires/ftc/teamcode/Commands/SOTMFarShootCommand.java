@@ -12,7 +12,11 @@ import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
  */
 public class SOTMFarShootCommand extends ParallelDeadlineGroup {
     public SOTMFarShootCommand(Maelstrom robot) {
-        super(new TeleOPFarShootCommand(robot),new RunCommand(() -> robot.shooter.updateCommand(robot.dt.compensatedDistance)));
+        super(
+                new TeleOPFarShootCommand(robot),
+                new RunCommand(() -> robot.shooter.updateCommand(robot.dt.compensatedDistance))
+        );
+
         addRequirements(robot.intake, robot.shooter);
     }
 }

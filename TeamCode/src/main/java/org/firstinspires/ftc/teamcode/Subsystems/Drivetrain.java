@@ -61,8 +61,8 @@ public class Drivetrain extends SubsystemBase {
 
     private List<LynxModule> allHubs;
 
-    public double distance = 0;
-    public double compensatedDistance = 0;
+    public static double distance = 0;
+    public static double compensatedDistance = 0;
     private InterpLUT leadTimeLUT;
 
     private final KalmanFilter xFilter;
