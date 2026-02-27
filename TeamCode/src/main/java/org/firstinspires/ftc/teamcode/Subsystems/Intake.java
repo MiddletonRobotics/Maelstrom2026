@@ -46,7 +46,7 @@ public class Intake extends SubsystemBase
         colors2=sensor2.getNormalizedColors();
         intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        kicker.setPosition(0.75);
+        kicker.setPosition(0);
         kicker2.setPosition(0);
         stop();
     }
@@ -59,11 +59,11 @@ public class Intake extends SubsystemBase
 
         //telemetry.addData("Sensor 1 distance: ", sensor1.getDistance(DistanceUnit.INCH));
 
-        telemetry.addData("Sensor 2 Distance: ", sensor2.getDistance(DistanceUnit.INCH));
+        //telemetry.addData("Sensor 2 Distance: ", sensor2.getDistance(DistanceUnit.INCH));
 
         //telemetry.addData("Sensor 1 Color: ",colors1.red + " " + colors1.green + " " + colors1.blue );
         //telemetry.addData("Sensor 2 Color: ",colors2.red + " " + colors2.green + " " + colors2.blue );
-        loopCounter++;
+        //loopCounter++;
     }
 
     public void setPower(double p)
@@ -100,12 +100,12 @@ public class Intake extends SubsystemBase
 
     public void kickerDown()
     {
-        kicker.setPosition(0.75);
+        kicker.setPosition(0);
     }
 
     public void kickerUp()
     {
-        kicker.setPosition(0.1);
+        kicker.setPosition(0.723);
     }
 
     public void kickerHalfway()
