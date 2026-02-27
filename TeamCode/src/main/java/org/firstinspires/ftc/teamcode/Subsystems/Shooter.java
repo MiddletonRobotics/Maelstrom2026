@@ -109,7 +109,7 @@ public class Shooter extends SubsystemBase {
             shooterMotor.set(0);
         }
 
-        currentVelocity = shooterMotor.getCorrectedVelocity();
+        currentVelocity = shooterMotor.getVelocity();
 
         // Keep all servo positions intact
         setLight();
