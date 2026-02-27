@@ -21,9 +21,9 @@ public class TeleOPFarShootCommand extends SequentialCommandGroup {
         addCommands(
                 // new InstantCommand(intake::slowSpinOut),
                 // new WaitCommand(50),
-                //new InstantCommand(shooter::enableShooting),
+                new InstantCommand(shooter::enableShooting),
                 new InstantCommand(intake::stop),
-                //new InstantCommand(shooter::shootAutoVelocity),
+                new InstantCommand(shooter::shootAutoVelocity),
                 new WaitUntilCommand(shooter::atSpeed).withTimeout(500),
                 new InstantCommand(intake::kickerUp),
                 new WaitCommand(200),
