@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDFController;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
+import com.seattlesolvers.solverslib.hardware.motors.MotorGroup;
 import com.seattlesolvers.solverslib.util.InterpLUT;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -24,7 +27,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants;
 //import dev.frozenmilk.dairy.core.util.controller.calculation.pid.DoubleComponent;
 
 public class Shooter extends SubsystemBase {
-    public DcMotorEx shooterMotor;
+    public MotorGroup shooterMotor;
     private Servo hoodServo;
     private double hoodAngle;
     private Servo light;
@@ -46,9 +49,14 @@ public class Shooter extends SubsystemBase {
         this.telemetry = telemetry;
         this.alliance = color;
 
-        shooterMotor = aHardwareMap.get(DcMotorEx.class, "shooter");
-        shooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        shooterMotor.setVelocityPIDFCoefficients(kP, kI, kD, 0);
+
+        MotorEx shooterMotor1= new MotorEx(aHardwareMap, ShooterConstants.shooterMotorID, Motor.GoBILDA.BARE);
+        shooterMotor1.setInverted(true);
+        MotorEx shooterMotor2= new MotorEx(aHardwareMap,"shooter2", Motor.GoBILDA.BARE);
+        shooterMotor2.setInverted(false);
+        shooterMotor = new MotorGroup(shooterMotor1,shooterMotor2);
+        shooterMotor.setRunMode(Motor.RunMode.RawPower);
+        shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
         hoodServo = aHardwareMap.get(Servo.class, "hood");
         hoodServo.setDirection(Servo.Direction.REVERSE);
@@ -96,12 +104,12 @@ public class Shooter extends SubsystemBase {
 
         // Update shooter velocity
         if (flywheelOn) {
-            shooterMotor.setPower(velocityController.calculate(currentVelocity, targetVelocity));
+            shooterMotor.set(velocityController.calculate(currentVelocity, targetVelocity));
         } else {
-            shooterMotor.setPower(0);
+            shooterMotor.set(0);
         }
 
-        currentVelocity = shooterMotor.getVelocity();
+        currentVelocity = shooterMotor.getCorrectedVelocity();
 
         // Keep all servo positions intact
         setLight();
@@ -140,7 +148,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void reverseWheel() {
-        shooterMotor.setPower(-0.1);
+        shooterMotor.set(-0.1);
         flywheelOn = false;
     }
 
@@ -149,7 +157,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void stopFlywheel() {
-        shooterMotor.setPower(0);
+        shooterMotor.set(0);
         flywheelOn = false;
     }
 
@@ -166,7 +174,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setFullPower() {
-        shooterMotor.setPower(1);
+        shooterMotor.set(1);
     }
 
     public void setLight() {
@@ -216,7 +224,7 @@ public class Shooter extends SubsystemBase {
     }
 
     private void autoHood() {
-        double vel = Math.max(Math.min(shooterMotor.getVelocity(), 2549), 1001);
+        double vel = Math.max(Math.min(shooterMotor.getCorrectedVelocity(), 2549), 1001);
         hoodAngle = hoodTable.get(vel);
     }
 

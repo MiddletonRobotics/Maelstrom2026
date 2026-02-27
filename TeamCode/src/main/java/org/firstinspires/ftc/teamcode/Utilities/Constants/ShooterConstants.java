@@ -16,7 +16,7 @@ public class ShooterConstants {
     public static double shooterHeight = 0;
     public static double transferEfficiency = 0.8;
     public static double wheelRadius = 0;
-    public static double closeVelocity = 1400;
+    public static double closeVelocity = 200;
     public static double farVelocity = 2700;
     public static double midVelocity = 1700;
     public static double velocityTolerance = 30;
