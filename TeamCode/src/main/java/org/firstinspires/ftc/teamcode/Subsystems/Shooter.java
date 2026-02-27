@@ -64,14 +64,14 @@ public class Shooter extends SubsystemBase {
         table.add(37, 1400);
         table.add(42.5, 1500);
         table.add(70.5, 1700);
-        table.add(149, 2250);
+        table.add(149, 2550);
         table.createLUT();
 
         hoodTable = new InterpLUT();
         hoodTable.add(1000, 0);
         hoodTable.add(1400, 0.1);
         hoodTable.add(1600, 0.45);
-        hoodTable.add(2250, 0.86);
+        hoodTable.add(2550, 0.86);
         hoodTable.createLUT();
 
         flywheelOn = false;
@@ -83,9 +83,9 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         updateDistance(Drivetrain.compensatedDistance);
         updateAutoVelocity();
-        autoHood();
         if (useAuto) {
             // shootAutoVelocity();
+            autoHood();
         }
         setHood(hoodAngle);
 
@@ -206,8 +206,17 @@ public class Shooter extends SubsystemBase {
         hoodServo.setPosition(d);
     }
 
+    public void incrementUp()
+    {
+        hoodAngle=Math.min(1,hoodAngle+0.1);
+    }
+    public void incrementDown()
+    {
+        hoodAngle=Math.max(0,hoodAngle-0.1);
+    }
+
     private void autoHood() {
-        double vel = Math.max(Math.min(shooterMotor.getVelocity(), 2249), 1001);
+        double vel = Math.max(Math.min(shooterMotor.getVelocity(), 2549), 1001);
         hoodAngle = hoodTable.get(vel);
     }
 

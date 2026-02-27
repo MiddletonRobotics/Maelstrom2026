@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
+import static org.firstinspires.ftc.teamcode.Subsystems.Maelstrom.blueCorner1H;
+import static org.firstinspires.ftc.teamcode.Subsystems.Maelstrom.blueCorner1x;
+import static org.firstinspires.ftc.teamcode.Subsystems.Maelstrom.blueCorner2x;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.compensatedBlueGoal;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.compensatedRedGoal;
 
@@ -31,6 +34,8 @@ public class AutoAimTurret extends CommandBase {
         } else if (color.equals(Maelstrom.Alliance.RED)) {
             turret.calculatePoseAngle(compensatedRedGoal, botPose.get());
         }
+
+        //Maelstrom.blueCorner1=new Pose(blueCorner1x,blueCorner2x,Math.toRadians(blueCorner1H));
     }
 
     @Override

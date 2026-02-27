@@ -148,7 +148,7 @@ public class Turret extends SubsystemBase
         if(hasTarget)
         {
             targetAngle = getAngle() + tx;
-            targetAngle = Math.max(-100, Math.min(100, targetAngle));
+            targetAngle = Math.max(-120, Math.min(100, targetAngle));
         }
     }
 
@@ -158,7 +158,7 @@ public class Turret extends SubsystemBase
         telemetry.addData("Atan: ", Math.toDegrees(angleToTargetFromCenter));
         double robotAngleDiff = normalizeAngle(angleToTargetFromCenter - robotPose.getHeading());
         telemetry.addData("RobotAngleDiff: ", Math.toDegrees(robotAngleDiff));
-        robotAngleDiff= Math.max(Math.min(robotAngleDiff,Math.toRadians(90)),Math.toRadians(-90));
+        robotAngleDiff= Math.max(Math.min(robotAngleDiff,Math.toRadians(120)),Math.toRadians(-105));
         targetPoseAngle= Math.toDegrees(robotAngleDiff);
     }
 
@@ -207,6 +207,18 @@ public class Turret extends SubsystemBase
         turretMotor.stopAndResetEncoder();
     }
 
+    public void offsetUp()
+    {
+        offsetAngle+=2;
+    }
+    public void offsetDown()
+    {
+        offsetAngle-=2;
+    }
+    public void resetOffset()
+    {
+        offsetAngle=0;
+    }
     public void setOffsetAngle(double angle)
     {
         offsetAngle=angle;
@@ -273,5 +285,11 @@ public class Turret extends SubsystemBase
             }
         }
 
+    }
+
+    public void parkMode()
+    {
+        setManualAngle(-90);
+        setPointMode();
     }
 }

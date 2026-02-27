@@ -36,12 +36,16 @@ public class TeleOPBindings {
     public Button poseReset;
     public Button closeShoot;
     public Trigger farShoot;
+    public Button toggleAutoHood;
+    public Trigger resetTurret;
     public Button parkUp;
     public Button parkDown;
     public Button park1;
     public Button park2;
     public Button park3;
     public Button park4;
+    public Button enableTurret;
+    public Button disableTurret;
 
     // Driver 2
     public Trigger intakeIn;
@@ -53,6 +57,10 @@ public class TeleOPBindings {
     public Button closeVelocity;
     public Button midVelocity;
     public Button farVelocity;
+    public Trigger hoodUp;
+    public Trigger hoodDown;
+    public Trigger turretUp;
+    public Trigger turretDown;
 
     private Maelstrom robot;
 
@@ -71,6 +79,10 @@ public class TeleOPBindings {
         park2 = new GamepadButton(driver1, GamepadKeys.Button.DPAD_LEFT);
         park3 = new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN);
         park4 = new GamepadButton(driver1, GamepadKeys.Button.DPAD_RIGHT);
+        enableTurret = new GamepadButton(driver1, GamepadKeys.Button.X);
+        disableTurret= new GamepadButton(driver1, GamepadKeys.Button.Y);
+        toggleAutoHood= new GamepadButton(driver1, GamepadKeys.Button.LEFT_BUMPER);
+        resetTurret= new Trigger(()-> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5);
 
         intakeIn = new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5);
         intakeOut = new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5);
@@ -81,6 +93,11 @@ public class TeleOPBindings {
         closeVelocity = new GamepadButton(driver2, GamepadKeys.Button.B);
         midVelocity = new GamepadButton(driver2, GamepadKeys.Button.X);
         farVelocity = new GamepadButton(driver2, GamepadKeys.Button.Y);
+        hoodUp= new Trigger(()-> driver2.getLeftY() > 0.5);
+        hoodDown= new Trigger(()-> driver2.getLeftY() < -0.5);
+        turretUp= new Trigger(()-> driver2.getLeftX() > 0.5);
+        turretDown= new Trigger(()-> driver2.getLeftX() < -0.5);
+
     }
 
     public void controlMap() {
@@ -100,6 +117,12 @@ public class TeleOPBindings {
         park3.whenPressed(new ParkCommand(robot, robot.dt::getPose, blueCorner3), true);
         park4.whenPressed(new ParkCommand(robot, robot.dt::getPose, blueCorner4), true);
 
+        disableTurret.whenPressed(new InstantCommand(robot.turret::parkMode));
+        enableTurret.whenPressed(new InstantCommand(robot.turret::startPoseTracking));
+
+        toggleAutoHood.whenPressed(new InstantCommand(robot.shooter::toggleAuto));
+        resetTurret.whenActive(new InstantCommand(robot.turret::resetOffset));
+
         // Driver 2
         intakeIn.whenActive(new InstantCommand(robot.intake::spinIn))
                 .whenInactive(new InstantCommand(robot.intake::stop));
@@ -114,6 +137,12 @@ public class TeleOPBindings {
         closeVelocity.whenPressed(new InstantCommand(robot.shooter::shootClose));
         midVelocity.whenPressed(new InstantCommand(robot.shooter::shootMid));
         farVelocity.whenPressed(new InstantCommand(robot.shooter::shootFar));
+
+        hoodUp.whenActive(robot.shooter::incrementUp);
+        hoodDown.whenActive(robot.shooter::incrementDown);
+
+        turretUp.whenActive(robot.turret::offsetUp);
+        turretDown.whenActive(robot.turret::offsetDown);
     }
 
     public void configureDefaultCommands() {

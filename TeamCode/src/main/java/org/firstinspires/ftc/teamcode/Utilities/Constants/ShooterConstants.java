@@ -17,7 +17,7 @@ public class ShooterConstants {
     public static double transferEfficiency = 0.8;
     public static double wheelRadius = 0;
     public static double closeVelocity = 1400;
-    public static double farVelocity = 2800;
+    public static double farVelocity = 2700;
     public static double midVelocity = 1700;
     public static double velocityTolerance = 30;
     public static double speedDropThreshold = 150; // velocity drop (ticks/s) indicating ball launched
