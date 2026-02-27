@@ -34,7 +34,7 @@ public class TurretConstants {
 
     public static double angleTolerance = 2;
 
-    public static Pose blueGoal = new Pose(9, 138);
+    public static Pose blueGoal = new Pose(6, 138);
     public static Pose redGoal = blueGoal.mirror();
 
     // SOTM: minimum speed (in/s) before compensation activates
