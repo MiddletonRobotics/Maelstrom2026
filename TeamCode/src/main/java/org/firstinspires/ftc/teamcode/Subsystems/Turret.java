@@ -41,254 +41,237 @@ import org.firstinspires.ftc.teamcode.Utilities.Storage;
 
 import java.util.List;
 
-public class Turret extends SubsystemBase
-{
-    public enum TurretState{
-        MANUALPOWER,MANUALANGLE,VISIONTRACKING,POSETRACKING,IDLE;
+public class Turret extends SubsystemBase {
+    public enum TurretState {
+        MANUALPOWER, MANUALANGLE, VISIONTRACKING, POSETRACKING, IDLE;
     }
+
     public TurretState state;
     private MotorEx turretMotor;
     private Motor.Encoder encoder;
-    private PIDFController turretController = new PIDFController(kP,kI,kD,kF);
-    private PIDFController secondaryController = new PIDFController(sP,sI,sD,sF);
-    private SimpleMotorFeedforward frictionController= new SimpleMotorFeedforward(fS,kV);
+    private PIDFController turretController = new PIDFController(kP, kI, kD, kF);
+    private PIDFController secondaryController = new PIDFController(sP, sI, sD, sF);
+    private SimpleMotorFeedforward frictionController = new SimpleMotorFeedforward(fS, kV);
 
     private Telemetry telemetry;
 
     private double currentAngle;
-    private double targetAngle=0;
-    private double targetPoseAngle=0;
-    private double manualAngle=0;
+    private double targetAngle = 0;
+    private double targetPoseAngle = 0;
+    private double manualAngle = 0;
     public double manualPower;
-    public double motorPower=0;
-    public double ksPower=kS;
-    public static double offsetAngle=0;
-    public static double tempOffset=0;
-    public static double atan=0;
+    public double motorPower = 0;
+    public double ksPower = kS;
+    public static double offsetAngle = 0;
+    public static double tempOffset = 0;
+    public static double atan = 0;
 
-    public Turret(HardwareMap hMap, Telemetry telemetry)
-    {
-        this.telemetry=telemetry;
-        turretMotor= new MotorEx(hMap,"turret");
-        encoder=turretMotor.encoder;
+    public Turret(HardwareMap hMap, Telemetry telemetry) {
+        this.telemetry = telemetry;
+        turretMotor = new MotorEx(hMap, "turret");
+        encoder = turretMotor.encoder;
         turretMotor.motorEx.setDirection(DcMotorSimple.Direction.REVERSE);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
         turretMotor.stopAndResetEncoder();
-        state=TurretState.IDLE;
+        state = TurretState.IDLE;
         secondaryController.setTolerance(angleTolerance);
         turretController.setTolerance(angleTolerance);
     }
 
     @Override
-    public void periodic()
-    {
-        telemetry.addData("Current Angle: ",getAngle());
+    public void periodic() {
+        telemetry.addData("Current Angle: ", getAngle());
         telemetry.addData("Target Angle: ", manualAngle);
         telemetry.addData("Turret Encoder: ", encoder.getPosition());
         telemetry.addData("Offset: ", offsetAngle);
         telemetry.addData("Temp Offset: ", Storage.turretOffset);
         telemetry.addData("Inverse Turret Encoder: ", getInversePosition());
-        telemetry.addData("Manual Power: ",manualPower);
-        telemetry.addData("Error: ", Math.abs(getAngle()-targetPoseAngle));
+        telemetry.addData("Manual Power: ", manualPower);
+        telemetry.addData("Error: ", Math.abs(getAngle() - targetPoseAngle));
         telemetry.addData("kF: ", sF);
-        telemetry.addData("Velocity: ",turretMotor.getVelocity());
+        telemetry.addData("Velocity: ", turretMotor.getVelocity());
         telemetry.addData("sP: ", sP);
         telemetry.addData("fS: ", fS);
 
-        turretController.setPIDF(kP,kI,kD,kF);
-        secondaryController.setPIDF(sP,sI,sD,sF);
-        ksPower=kS;
+        turretController.setPIDF(kP, kI, kD, kF);
+        secondaryController.setPIDF(sP, sI, sD, sF);
+        ksPower = kS;
 
-        switch(state)
-        {
+        switch (state) {
             case VISIONTRACKING:
-                if(Math.abs(getAngle()-targetAngle)>PIDFSwitch) {
-                    motorPower=turretController.calculate(getAngle(), targetAngle);
-                }
-                else {
-                    motorPower=secondaryController.calculate(getAngle(), targetAngle);
+                if (Math.abs(getAngle() - targetAngle) > PIDFSwitch) {
+                    motorPower = turretController.calculate(getAngle(), targetAngle);
+                } else {
+                    motorPower = secondaryController.calculate(getAngle(), targetAngle);
                 }
                 break;
             case POSETRACKING:
-                if(Math.abs(getAngle()-targetPoseAngle)>PIDFSwitch)
-                {
-                    motorPower=-turretController.calculate(getAngle(),targetPoseAngle);
+                if (Math.abs(getAngle() - targetPoseAngle) > PIDFSwitch) {
+                    motorPower = -turretController.calculate(getAngle(), targetPoseAngle);
                     telemetry.addData("Motor Power: ", motorPower);
-                }
-                else {
-                    motorPower=-secondaryController.calculate(getAngle(),targetPoseAngle);
-                    //applyFeedForward();
-                    //useFFcontroller();
+                } else {
+                    motorPower = -secondaryController.calculate(getAngle(), targetPoseAngle);
+                    // applyFeedForward();
+                    // useFFcontroller();
                 }
                 break;
             case MANUALANGLE:
-                if(Math.abs(getAngle()-manualAngle)>PIDFSwitch) {
-                    motorPower=-turretController.calculate(getAngle(), manualAngle);
-                }
-                else {
-                    motorPower=-secondaryController.calculate(getAngle(), manualAngle);
-                    //applyFeedForward();
-                    //useFFcontroller();
+                if (Math.abs(getAngle() - manualAngle) > PIDFSwitch) {
+                    motorPower = -turretController.calculate(getAngle(), manualAngle);
+                } else {
+                    motorPower = -secondaryController.calculate(getAngle(), manualAngle);
+                    // applyFeedForward();
+                    // useFFcontroller();
                 }
                 break;
             case MANUALPOWER:
-                motorPower=manualPower;
+                motorPower = manualPower;
                 break;
             case IDLE:
-                motorPower=0;
+                motorPower = 0;
                 break;
         }
-        motorPower=Math.max(Math.min(motorPower,0.6),-0.6);
+        motorPower = Math.max(Math.min(motorPower, 0.6), -0.6);
         turretMotor.set(motorPower);
         setTempOffset(getAngle());
     }
 
-    public void getTargetAngle(double tx,boolean hasTarget)
-    {
-        if(hasTarget)
-        {
+    public void getTargetAngle(double tx, boolean hasTarget) {
+        if (hasTarget) {
             targetAngle = getAngle() + tx;
             targetAngle = Math.max(-120, Math.min(100, targetAngle));
         }
     }
 
-    public void calculatePoseAngle(Pose targetPose, Pose robotPose)
-    {
-        double angleToTargetFromCenter = Math.atan2(targetPose.getY() - robotPose.getY(), targetPose.getX() - robotPose.getX());
+    public void calculatePoseAngle(Pose targetPose, Pose robotPose) {
+        double angleToTargetFromCenter = Math.atan2(targetPose.getY() - robotPose.getY(),
+                targetPose.getX() - robotPose.getX());
         telemetry.addData("Atan: ", Math.toDegrees(angleToTargetFromCenter));
         double robotAngleDiff = normalizeAngle(angleToTargetFromCenter - robotPose.getHeading());
         telemetry.addData("RobotAngleDiff: ", Math.toDegrees(robotAngleDiff));
-        robotAngleDiff= Math.max(Math.min(robotAngleDiff,Math.toRadians(120)),Math.toRadians(-105));
-        targetPoseAngle= Math.toDegrees(robotAngleDiff);
+        robotAngleDiff = Math.max(Math.min(robotAngleDiff, Math.toRadians(120)), Math.toRadians(-105));
+        targetPoseAngle = Math.toDegrees(robotAngleDiff);
     }
 
-    public void setManualAngle(double angle)
-    {
-        manualAngle=angle;
+    public void setManualAngle(double angle) {
+        manualAngle = angle;
     }
 
-    public double getAngle()
-    {
-        return (-encoder.getPosition()*(360/537.7))/3 + offsetAngle ;
+    public double getAngle() {
+        return (-encoder.getPosition() * (360 / 537.7)) / 3 + offsetAngle;
     }
 
-    public double getInversePosition()
-    {
+    public double getInversePosition() {
         return -encoder.getPosition();
     }
-    public void setPower(double p)
-    {
-        manualPower=p;
+
+    public void setPower(double p) {
+        manualPower = p;
     }
 
-    public void setManualControl()
-    {
-        state= MANUALPOWER;
+    public void setManualControl() {
+        state = MANUALPOWER;
     }
 
-    public void startVisionTracking()
-    {
-        state= TurretState.VISIONTRACKING;
-    }
-    public void startPoseTracking()
-    {
-        state=POSETRACKING;
+    public void startVisionTracking() {
+        state = TurretState.VISIONTRACKING;
     }
 
-
-    public void setPointMode()
-    {
-        state=TurretState.MANUALANGLE;
+    public void startPoseTracking() {
+        state = POSETRACKING;
     }
 
+    public void setPointMode() {
+        state = TurretState.MANUALANGLE;
+    }
 
-    public void stopAndReset()
-    {
+    public void stopAndReset() {
         turretMotor.stopAndResetEncoder();
     }
 
-    public void offsetUp()
-    {
-        offsetAngle+=2;
-    }
-    public void offsetDown()
-    {
-        offsetAngle-=2;
-    }
-    public void resetOffset()
-    {
-        offsetAngle=0;
-    }
-    public void setOffsetAngle(double angle)
-    {
-        offsetAngle=angle;
-    }
-    public void setTempOffset(double angle)
-    {
-        Storage.turretOffset=angle;
-    }
-    public void updateOffset()
-    {
-        offsetAngle= Storage.turretOffset;
+    public void offsetUp() {
+        offsetAngle += 2;
     }
 
-    public boolean atTarget()
-    {
+    public void offsetDown() {
+        offsetAngle -= 2;
+    }
+
+    public void resetOffset() {
+        offsetAngle = 0;
+    }
+
+    public void setOffsetAngle(double angle) {
+        offsetAngle = angle;
+    }
+
+    public void setTempOffset(double angle) {
+        Storage.turretOffset = angle;
+    }
+
+    public void updateOffset() {
+        offsetAngle = Storage.turretOffset;
+    }
+
+    public boolean atTarget() {
         return secondaryController.atSetPoint();
     }
 
     public static double normalizeAngle(double angleRadians) {
         double angle = angleRadians % (Math.PI * 2D);
-        if (angle <= -Math.PI) angle += Math.PI * 2D;
-        if (angle > Math.PI) angle -= Math.PI * 2D;
+        if (angle <= -Math.PI)
+            angle += Math.PI * 2D;
+        if (angle > Math.PI)
+            angle -= Math.PI * 2D;
         return angle;
     }
 
-    private void applyFeedForward()
-    {
+    public static double normalizeAngleTurret(double angleRadians) {
+        double minRad = Math.toRadians(-150);
+        double maxRad = Math.toRadians(210);
+        double range = maxRad - minRad; // 360 degrees in radians
+        double angle = angleRadians - minRad;
+        angle = angle % range;
+        if (angle < 0)
+            angle += range;
+        return angle + minRad;
+    }
 
-        if(!secondaryController.atSetPoint() && Math.abs(motorPower)>0.01 && Math.abs(turretMotor.getVelocity())<turretVelocityTolerance)
-        {
-            if(motorPower>0)
-            {
-                motorPower+=ksPower;
+    private void applyFeedForward() {
+
+        if (!secondaryController.atSetPoint() && Math.abs(motorPower) > 0.01
+                && Math.abs(turretMotor.getVelocity()) < turretVelocityTolerance) {
+            if (motorPower > 0) {
+                motorPower += ksPower;
+            } else {
+                motorPower -= ksPower;
             }
-            else
-            {
-                motorPower-=ksPower;
-            }
-            motorPower=Math.max(Math.min(motorPower,1),-1);
+            motorPower = Math.max(Math.min(motorPower, 1), -1);
         }
-
 
         /*
-        if(targetAngle-getAngle()>0)
-        {
-            motorPower+=ksPower;
-        }
-        else {
-            motorPower-=ksPower;
-        }
+         * if(targetAngle-getAngle()>0)
+         * {
+         * motorPower+=ksPower;
+         * }
+         * else {
+         * motorPower-=ksPower;
+         * }
          */
     }
 
-    private void useFFcontroller()
-    {
-        if(!secondaryController.atSetPoint()){
-            if(motorPower>0)
-            {
-                motorPower+=frictionController.calculate(400);
-            }
-            else if(motorPower<0)
-            {
-                motorPower-=frictionController.calculate(400);
+    private void useFFcontroller() {
+        if (!secondaryController.atSetPoint()) {
+            if (motorPower > 0) {
+                motorPower += frictionController.calculate(400);
+            } else if (motorPower < 0) {
+                motorPower -= frictionController.calculate(400);
             }
         }
 
     }
 
-    public void parkMode()
-    {
+    public void parkMode() {
         setManualAngle(-90);
         setPointMode();
     }
