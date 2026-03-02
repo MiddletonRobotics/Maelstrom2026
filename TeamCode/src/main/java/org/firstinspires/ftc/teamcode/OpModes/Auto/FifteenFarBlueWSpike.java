@@ -12,44 +12,41 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Commands.FarShootCommand;
-import org.firstinspires.ftc.teamcode.Commands.FinalShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
-import org.firstinspires.ftc.teamcode.Paths.FarNineBallBluePaths;
-import org.firstinspires.ftc.teamcode.Paths.FarNineBallRedPaths;
-import org.firstinspires.ftc.teamcode.Paths.FarNineBallRedPathsV2;
+import org.firstinspires.ftc.teamcode.Paths.FarNineBallBluePathsV2;
+import org.firstinspires.ftc.teamcode.Paths.FifteenFarBlueSpikePaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
-
-@Autonomous
-public class NineBallFarRed extends CommandOpMode
+@Autonomous(name="15FarBlueWSpike")
+public class FifteenFarBlueWSpike extends CommandOpMode
 {
     private Maelstrom robot;
     private Follower follower;
-    private FarNineBallRedPathsV2 paths;
+    private FifteenFarBlueSpikePaths paths;
 
     @Override
     public void initialize()
     {
-        robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
+        robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         follower=robot.dt.follower;
-        follower.setStartingPose(new Pose(56,9,Math.toRadians(180)).mirror());
+        follower.setStartingPose(new Pose(56,9,Math.toRadians(180)));
         robot.shooter.setTargetVelocity(2000);
-        paths= new FarNineBallRedPathsV2(follower);
+        paths= new FifteenFarBlueSpikePaths(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.shooter.setHood(0.7)),
-                        new InstantCommand(() -> robot.turret.setTempOffset(72)),
+                        new InstantCommand(() -> robot.turret.setTempOffset(-73)),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(72)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(-72)),
                                 new FollowPathCommand(follower,paths.Start,true)
                         ),
                         new WaitCommand(500),
-                        new FarShootCommand(robot),
+                        new ShootCommandV2(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPath(robot,paths.Pickup1,true,1).withTimeout(2500),
                         new FollowPathCommand(follower,paths.Pickup12,false).withTimeout(1000),
@@ -60,14 +57,26 @@ public class NineBallFarRed extends CommandOpMode
                         new InstantCommand(() -> robot.intake.idle()),
                         new FollowPathCommand(follower,paths.Return1),
                         new InstantCommand(() -> robot.intake.stop()),
-                        new FarShootCommand(robot),
+                        new ShootCommandV2(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPath(robot,paths.Pickup2,false,1),
                         new FollowPathCommand(follower,paths.Pickup22,true).withTimeout(2500),
                         new WaitCommand(500),
                         new InstantCommand(() -> robot.intake.idle()),
                         new FollowPathCommand(follower,paths.Return2),
-                        new FarShootCommand(robot),
+                        new ShootCommandV2(robot),
+                        new InstantCommand(robot.intake::spinIn),
+                        new FollowPathCommand(follower,paths.Pickup3,true).withTimeout(2500),
+                        new FollowPathCommand(follower,paths.Pickup32,true).withTimeout(2500),
+                        new InstantCommand(robot.intake::idle),
+                        new FollowPathCommand(follower,paths.Return3,true),
+                        new ShootCommandV2(robot),
+                        new InstantCommand(robot.intake::spinIn),
+                        new FollowPathCommand(follower,paths.Pickup3,true).withTimeout(2500),
+                        new FollowPathCommand(follower,paths.Pickup32,true).withTimeout(2500),
+                        new InstantCommand(robot.intake::idle),
+                        new FollowPathCommand(follower,paths.Return3,true),
+                        new ShootCommandV2(robot),
                         new FollowPathCommand(follower,paths.Leave),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),
