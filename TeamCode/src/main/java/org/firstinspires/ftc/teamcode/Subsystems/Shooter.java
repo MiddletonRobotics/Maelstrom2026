@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     public double autoVelocity;
     public boolean flywheelOn;
     public boolean shooting;
-    public boolean useAuto = false;
+    public boolean useAuto = true;
     private double distance = 1;
     public PIDFController velocityController = new PIDFController(kP, kI, kD, ShooterConstants.kF);
 
@@ -69,17 +69,18 @@ public class Shooter extends SubsystemBase {
 
         table = new InterpLUT();
         table.add(0, 1000);
-        table.add(37, 1400);
-        table.add(42.5, 1500);
-        table.add(70.5, 1700);
-        table.add(149, 2550);
+        table.add(37, 1300);
+        table.add(42.5, 1400);
+        table.add(70.5, 1600);
+        table.add(149, 2300);
         table.createLUT();
 
         hoodTable = new InterpLUT();
         hoodTable.add(1000, 0);
         hoodTable.add(1400, 0.1);
-        hoodTable.add(1600, 0.45);
-        hoodTable.add(2550, 0.86);
+        hoodTable.add(1600, 0.2);
+        hoodTable.add(1900,0.3);
+        hoodTable.add(2300, 0.46);
         hoodTable.createLUT();
 
         flywheelOn = false;
@@ -224,7 +225,7 @@ public class Shooter extends SubsystemBase {
     }
 
     private void autoHood() {
-        double vel = Math.max(Math.min(shooterMotor.getCorrectedVelocity(), 2549), 1001);
+        double vel = Math.max(Math.min(shooterMotor.getVelocity(), 2299), 1001);
         hoodAngle = hoodTable.get(vel);
     }
 
