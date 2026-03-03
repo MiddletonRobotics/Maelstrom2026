@@ -10,10 +10,7 @@ public class FifteenBallBluePaths
     public PathChain Start;
     public PathChain Pickup1;
     public PathChain Pickup12;
-    public PathChain Gate;
-    public PathChain Gate2;
     public PathChain Return1;
-    public PathChain Return12;
     public PathChain GateIntake1;
     public PathChain GateIntake2;
     public PathChain GateReturn;
@@ -54,39 +51,17 @@ public class FifteenBallBluePaths
 
                 .build();
 
-        Gate = follower.pathBuilder().addPath(
-                        new BezierLine(
-                                new Pose(11.000, 59.288),
-
-                                new Pose(28.723, 60.731)
-                        )
-                ).setConstantHeadingInterpolation(Math.toRadians(180))
-
-                .build();
-
-        Gate2 = follower.pathBuilder().addPath(
-                        new BezierLine(
-                                new Pose(28.723, 60.731),
-
-                                new Pose(15.138, 70.165)
-                        )
-                ).setConstantHeadingInterpolation(Math.toRadians(180))
-
-                .build();
 
         Return1 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(15.138, 70.165),
+                                new Pose(11.000, 59.288),
 
-                                new Pose(39.048, 71.478)
+                                new Pose(39.048, 60.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
-
-                .build();
-
-        Return12 = follower.pathBuilder().addPath(
+                .addPath(
                         new BezierLine(
-                                new Pose(39.048, 71.478),
+                                new Pose(39.048, 60.000),
 
                                 new Pose(58.300, 85.000)
                         )
