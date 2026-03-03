@@ -54,6 +54,7 @@ public class ParkCommand extends CommandBase
     public void end(boolean interrupted)
     {
         dt.follower.breakFollowing();
+        dt.follower.startTeleopDrive();
     }
 
 }
