@@ -62,6 +62,7 @@ public class FifteenCloseRed extends CommandOpMode
                                 new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPathCommand(follower,paths.GateIntake1,true).withTimeout(2500),
                                 new FollowPathCommand(follower,paths.GateIntake2,true),
+                                new WaitCommand(250),
                                 new FollowPathCommand(follower,paths.GateReturn,true),
                                 new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),

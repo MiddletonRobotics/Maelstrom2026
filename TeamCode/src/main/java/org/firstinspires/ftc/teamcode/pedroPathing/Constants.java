@@ -28,7 +28,7 @@ public class Constants {
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.018,0,0.0017,0.6,0.01))
             .useSecondaryDrivePIDF(true)
             .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.001,0,0.0005,0.6,0.01))
-            .centripetalScaling(0.005);
+            .centripetalScaling(0);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(7.3125)

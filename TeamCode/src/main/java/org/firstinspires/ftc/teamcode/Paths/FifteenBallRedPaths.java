@@ -109,7 +109,7 @@ public class FifteenBallRedPaths
                         new BezierLine(
                                 new Pose(58.300, 85.000).mirror(),
 
-                                new Pose(18.000, 84.000).mirror()
+                                new Pose(16.000, 84.000).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 
@@ -117,7 +117,7 @@ public class FifteenBallRedPaths
 
         Return2 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(18.000, 84.000).mirror(),
+                                new Pose(16.000, 84.000).mirror(),
 
                                 new Pose(58.300, 85.000).mirror()
                         )
@@ -152,7 +152,6 @@ public class FifteenBallRedPaths
                                 new Pose(57.000, 107.000).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
-                .setReversed()
                 .build();
     }
 }

@@ -70,17 +70,20 @@ public class Shooter extends SubsystemBase {
         table = new InterpLUT();
         table.add(0, 1000);
         table.add(37, 1300);
-        table.add(42.5, 1400);
-        table.add(70.5, 1600);
+        table.add(50, 1450);
+        table.add(70.5, 1550);
+        table.add(80,1620);
+        table.add(130,2150);
+        table.add(140,2225);
         table.add(149, 2300);
         table.createLUT();
 
         hoodTable = new InterpLUT();
         hoodTable.add(1000, 0);
-        hoodTable.add(1400, 0.1);
-        hoodTable.add(1600, 0.2);
-        hoodTable.add(1900,0.3);
-        hoodTable.add(2300, 0.46);
+        hoodTable.add(1400, 0.01);
+        hoodTable.add(1600, 0.1);
+        hoodTable.add(1900,0.5);
+        hoodTable.add(2300, 0.76);
         hoodTable.createLUT();
 
         flywheelOn = false;

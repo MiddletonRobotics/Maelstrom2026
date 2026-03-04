@@ -22,10 +22,10 @@ public class ShooterConstants {
     public static double velocityTolerance = 30;
     public static double speedDropThreshold = 150; // velocity drop (ticks/s) indicating ball launched
 
-    public static double kP = 0.00225;
+    public static double kP = 0.001;
     public static double kI = 0;
     public static double kD = 0;
-    public static double kF = 0.00037;
+    public static double kF = 0.00038;
 
     // SOTM lead-time LUT: distance (inches) → lead time (seconds)
     public static double[] leadTimeDistances = { 20, 40, 50, 60, 70, 80, 90, 130, 140, 150 };

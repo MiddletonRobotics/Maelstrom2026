@@ -17,8 +17,6 @@ public class FifteenFarRedSpikePaths
     public PathChain Pickup22;
     public PathChain Return2;
     public PathChain Pickup3;
-    public PathChain Pickup31;
-    public PathChain Pickup32;
     public PathChain Return3;
 
     public PathChain Leave;
@@ -127,26 +125,9 @@ public class FifteenFarRedSpikePaths
 
                 .build();
 
-        Pickup31 = follower.pathBuilder().addPath(
-                        new BezierLine(
-                                new Pose(8.500, 10.700).mirror(),
-
-                                new Pose(21.000, 11.700).mirror()
-                        )
-                ).setConstantHeadingInterpolation(Math.toRadians(0))
-                .addPath(
-                        new BezierLine(
-                                new Pose(21.000, 11.700).mirror(),
-
-                                new Pose(8.500, 14.600).mirror()
-                        )
-                ).setConstantHeadingInterpolation(Math.toRadians(0))
-
-                .build();
-
         Return3 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(8.500, 14.600).mirror(),
+                                new Pose(8.500, 10.700).mirror(),
 
                                 new Pose(56.000, 18.000).mirror()
                         )
