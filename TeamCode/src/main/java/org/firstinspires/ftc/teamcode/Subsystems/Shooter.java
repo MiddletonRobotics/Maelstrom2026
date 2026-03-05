@@ -83,7 +83,7 @@ public class Shooter extends SubsystemBase {
         hoodTable.add(1400, 0.01);
         hoodTable.add(1600, 0.1);
         hoodTable.add(1900,0.5);
-        hoodTable.add(2300, 0.76);
+        hoodTable.add(2300, 0.86);
         hoodTable.createLUT();
 
         flywheelOn = false;
