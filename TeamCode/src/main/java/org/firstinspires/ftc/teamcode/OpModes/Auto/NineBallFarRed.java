@@ -45,7 +45,7 @@ public class NineBallFarRed extends CommandOpMode
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(72)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(70)),
                                 new FollowPathCommand(follower,paths.Start,true)
                         ),
                         new WaitCommand(500),

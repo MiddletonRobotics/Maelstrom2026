@@ -31,18 +31,19 @@ public class FifteenFarBlueWSpike extends CommandOpMode
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         follower=robot.dt.follower;
         follower.setStartingPose(new Pose(56,9,Math.toRadians(180)));
-        robot.shooter.setTargetVelocity(2000);
+        robot.shooter.setTargetVelocity(2025);
+        robot.shooter.useAuto=false;
         paths= new FifteenFarBlueSpikePaths(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.shooter.setHood(0.7)),
-                        new InstantCommand(() -> robot.turret.setTempOffset(-73)),
+                        new InstantCommand(() -> robot.shooter.setHood(0.3)),
+                        new InstantCommand(() -> robot.turret.setTempOffset(-68)),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(-72)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(-68)),
                                 new FollowPathCommand(follower,paths.Start,true)
                         ),
                         new WaitCommand(500),

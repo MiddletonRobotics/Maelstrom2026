@@ -73,16 +73,18 @@ public class Shooter extends SubsystemBase {
         table.add(50, 1450);
         table.add(70.5, 1550);
         table.add(80,1620);
-        table.add(130,2150);
-        table.add(140,2225);
-        table.add(149, 2300);
+        table.add(130,2140);
+        table.add(140,2245);
+        table.add(149, 2340);
+        table.add(151,2360);
         table.createLUT();
 
         hoodTable = new InterpLUT();
         hoodTable.add(1000, 0);
         hoodTable.add(1400, 0.01);
         hoodTable.add(1600, 0.1);
-        hoodTable.add(1900,0.5);
+        hoodTable.add(1900,0.7);
+        hoodTable.add(2100, 0.76);
         hoodTable.add(2300, 0.86);
         hoodTable.createLUT();
 
@@ -99,7 +101,7 @@ public class Shooter extends SubsystemBase {
             // shootAutoVelocity();
             autoHood();
         }
-        setHood(hoodAngle);
+        hoodServo.setPosition(hoodAngle);
 
         if(shooting)
         {
@@ -203,7 +205,7 @@ public class Shooter extends SubsystemBase {
 
     public void updateDistance(double dist) {
         // distance= cam.getDistance();
-        distance = Math.max(Math.min(dist, 148), 1);
+        distance = Math.max(Math.min(dist, 150), 1);
     }
 
     public void updateAutoVelocity() {
@@ -215,7 +217,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setHood(double d) {
-        hoodServo.setPosition(d);
+        hoodAngle=d;
     }
 
     public void incrementUp()

@@ -31,21 +31,23 @@ public class FifteenFarRed extends CommandOpMode
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
         follower=robot.dt.follower;
         follower.setStartingPose(new Pose(56,9,Math.toRadians(180)).mirror());
-        robot.shooter.setTargetVelocity(2000);
+        robot.shooter.setTargetVelocity(2025);
+        robot.shooter.useAuto=false;
+        robot.shooter.setHood(0.3);
         paths= new FifteenFarRedSpikePaths(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.shooter.setHood(0.7)),
-                        new InstantCommand(() -> robot.turret.setTempOffset(72)),
+                        new InstantCommand(() -> robot.shooter.setHood(0.3)),
+                        new InstantCommand(() -> robot.turret.setTempOffset(68)),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(72)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(68)),
                                 new FollowPathCommand(follower,paths.Start,true)
                         ),
-                        new WaitCommand(500),
+                        new WaitCommand(600),
                         new ShootCommandV2(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPath(robot,paths.Pickup1,true,1).withTimeout(2500),
