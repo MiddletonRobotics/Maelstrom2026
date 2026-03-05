@@ -16,8 +16,12 @@ public class FifteenFarBlueSpikePaths
     public PathChain Pickup2;
     public PathChain Pickup22;
     public PathChain Return2;
+
     public PathChain Pickup3;
     public PathChain Return3;
+
+    public PathChain AltPickup;
+    public PathChain AltReturn;
 
     public PathChain Leave;
 
@@ -133,6 +137,33 @@ public class FifteenFarBlueSpikePaths
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
+                .build();
+
+        //Alternate Cycle
+        AltPickup = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(56.000, 18.000),
+
+                                new Pose(12.756, 29.198)
+                        )
+                ).setTangentHeadingInterpolation()
+                .addPath(
+                        new BezierLine(
+                                new Pose(12.756, 29.198),
+
+                                new Pose(9.620, 51.157)
+                        )
+                ).setTangentHeadingInterpolation()
+
+                .build();
+
+        AltReturn = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(9.620, 51.157),
+
+                                new Pose(56.000, 18.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
                 .build();
 
         //Leave
