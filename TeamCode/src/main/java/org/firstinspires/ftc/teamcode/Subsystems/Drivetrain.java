@@ -11,11 +11,13 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.redGoal;
 
 import com.pedropathing.control.KalmanFilter;
+import com.pedropathing.control.KalmanFilterParameters;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.localization.Localizer;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
+import com.seattlesolvers.solverslib.geometry.Rotation2d;
 import com.seattlesolvers.solverslib.util.InterpLUT;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
@@ -65,8 +67,14 @@ public class Drivetrain extends SubsystemBase {
     public static double compensatedDistance = 0;
     private InterpLUT leadTimeLUT;
 
-    private final KalmanFilter xFilter;
-    private final KalmanFilter yFilter;
+    private KalmanFilter xFilter;
+    private KalmanFilter yFilter;
+    private KalmanFilter headingFilter;
+
+    KalmanFilterParameters filterParameters = new KalmanFilterParameters(
+            0.01,  // modelCovariance: how much you trust your model (lower = trust model more)
+            0.1    // dataCovariance: how noisy your vision data is (lower = trust vision more)
+    );
 
     private Telemetry telemetry;
 
@@ -97,13 +105,15 @@ public class Drivetrain extends SubsystemBase {
          * rightRear.setInverted(false);
          */
 
+        xFilter = new KalmanFilter(filterParameters);
+        yFilter = new KalmanFilter(filterParameters);
+        headingFilter = new KalmanFilter(filterParameters);
+
         follower = Constants.createFollower(aHardwareMap);
         cams = cam;
         megaTagPose = cam.getPedro();
         park = aHardwareMap.get(CRServo.class, "park");
         this.telemetry = telemetry;
-        xFilter = new KalmanFilter(processNoise, measurementNoise);
-        yFilter = new KalmanFilter(processNoise2, measurementNoise2);
 
         allHubs = aHardwareMap.getAll(LynxModule.class);
         for (LynxModule hub : allHubs) {
@@ -123,15 +133,10 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         long startTime = System.nanoTime();
         // follower.updatePose();
-        xFilter.setProcessNoise(processNoise);
-        xFilter.setMeasurementNoise(measurementNoise);
-        yFilter.setProcessNoise(processNoise2);
-        yFilter.setMeasurementNoise(measurementNoise2);
         follower.update();
         cams.setMT2Orientation(follower.getPose());
         megaTagPose = cams.getPedro();
-        fusedPose = getFusedPose(follower.getPose(), megaTagPose);
-        // follower.setPose(fusedPose);
+        //follower.setPose(fusedPose);
         telemetry.addData("Drivetrain Pose X", follower.getPose().getX());
         telemetry.addData("Drivetrain Pose Y", follower.getPose().getY());
         telemetry.addData("Drivetrain Heading", follower.getPose().getHeading());
@@ -144,6 +149,39 @@ public class Drivetrain extends SubsystemBase {
         for (LynxModule hub : allHubs) {
             hub.clearBulkCache();
         }
+    }
+
+    public void updateWithVision(Pose estimatedVisionPose) {
+        xFilter.update(0, estimatedVisionPose.getX());
+        yFilter.update(0, estimatedVisionPose.getY());
+        headingFilter.update(0, estimatedVisionPose.getHeading());
+
+        // Get filtered values
+        double filteredX = xFilter.getState();
+        double filteredY = yFilter.getState();
+        double filteredHeading = headingFilter.getState();
+
+        // Fuse with odometry (weighted average or direct set)
+        Pose2d filteredVisionPose = new Pose2d(filteredX, filteredY, new Rotation2d(filteredHeading));
+        fusePoseEstimate(filteredVisionPose);
+    }
+
+    private void fusePoseEstimate(Pose2d visionPose) {
+        Pose currentPose = getPose();
+
+        double visionWeight = 0.3; // How much to trust vision vs odometry
+        double fusedX = currentPose.getX() * (1 - visionWeight) + visionPose.getX() * visionWeight;
+        double fusedY = currentPose.getY() * (1 - visionWeight) + visionPose.getY() * visionWeight;
+        double fusedHeading = currentPose.getHeading() * (1 - visionWeight) + visionPose.getHeading() * visionWeight;
+
+        setPose(new Pose(fusedX, fusedY, currentPose.getHeading()));
+        // setPoseEstimate(visionPose); Test this if vision is goated or not
+    }
+
+    public void resetVisionFilters(double x, double y, double heading) {
+        xFilter.reset(x, 0.1, 1.0);
+        yFilter.reset(y, 0.1, 1.0);
+        headingFilter.reset(heading, 0.1, 1.0);
     }
 
     public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric) {
@@ -176,14 +214,6 @@ public class Drivetrain extends SubsystemBase {
 
     public void setStartingPose(Pose pose) {
         startPose = pose;
-    }
-
-    public Pose getFusedPose(Pose currentPose, Pose limelightPose) {
-        double fusedX = xFilter.update(limelightPose.getX(), currentPose.getX());
-        double fusedY = yFilter.update(limelightPose.getY(), currentPose.getY());
-        double fusedHeading = currentPose.getHeading();
-
-        return new Pose(fusedX, fusedY, fusedHeading);
     }
 
     public void enableTeleop() {
@@ -327,36 +357,6 @@ public class Drivetrain extends SubsystemBase {
         } else {
             TurretConstants.compensatedRedGoal = compensatedGoal;
             TurretConstants.compensatedBlueGoal = blueGoal;
-        }
-    }
-
-    private static class KalmanFilter {
-        private double processNoise;
-        private double measurementNoise;
-        private double estimate;
-        private double errorCovariance;
-
-        public KalmanFilter(double processNoise, double measurementNoise) {
-            this.processNoise = processNoise;
-            this.measurementNoise = measurementNoise;
-            this.estimate = 0;
-            this.errorCovariance = 1;
-        }
-
-        public double update(double measurement, double prediction) {
-            errorCovariance += processNoise;
-            double kalmanGain = errorCovariance / (errorCovariance + measurementNoise);
-            estimate = prediction + kalmanGain * (measurement - prediction);
-            errorCovariance = (1 - kalmanGain) * errorCovariance;
-            return estimate;
-        }
-
-        public void setMeasurementNoise(double measurementNoise) {
-            this.measurementNoise = measurementNoise;
-        }
-
-        public void setProcessNoise(double processNoise) {
-            this.processNoise = processNoise;
         }
     }
 }

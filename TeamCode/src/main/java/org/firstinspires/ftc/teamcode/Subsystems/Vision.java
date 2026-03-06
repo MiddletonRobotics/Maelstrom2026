@@ -35,7 +35,7 @@ public class Vision extends SubsystemBase
         alliance=color;
         this.telemetry=telemetry;
         cam= hMap.get(Limelight3A.class,"limelight");
-        
+
         // CRITICAL: Start the Limelight before trying to get results
         //cam.start();
 
@@ -117,6 +117,18 @@ public class Vision extends SubsystemBase
         return 0;
     }
 
+    public boolean shouldTrustVision(Pose visionEstimate, Pose currentRobotPose) {
+        double deltaX = Math.abs(visionEstimate.getX() - currentRobotPose.getX());
+        double deltaY = Math.abs(visionEstimate.getY() - currentRobotPose.getY());
+
+        if (deltaX > 2 || deltaY > 2) {
+            return false;
+        }
+
+        // Check tag area (closer tags are more reliable)
+        return true;
+    }
+
     public boolean targetPresent()
     {
         return getTag()!=null;
@@ -178,6 +190,6 @@ public class Vision extends SubsystemBase
     public void setMT2Orientation(Pose pose)
     {
         Pose transformed= pose.getAsCoordinateSystem(FTCCoordinates.INSTANCE);
-        cam.updateRobotOrientation(transformed.getHeading());
+        cam.updateRobotOrientation(pose.getHeading());
     }
 }

@@ -44,7 +44,7 @@ public class TwelveBallBlueLine {
                         new BezierLine(
                                 new Pose(43.417, 60.000),
 
-                                new Pose(10.000, 59.288)
+                                new Pose(11.000, 59.288)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
@@ -52,7 +52,7 @@ public class TwelveBallBlueLine {
 
         Gate = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(10.000, 59.288),
+                                new Pose(11.000, 59.288),
 
                                 new Pose(28.723, 60.731)
                         )

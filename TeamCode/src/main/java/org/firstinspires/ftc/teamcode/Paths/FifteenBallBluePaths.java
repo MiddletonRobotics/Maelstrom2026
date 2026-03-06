@@ -114,7 +114,7 @@ public class FifteenBallBluePaths
                         new BezierLine(
                                 new Pose(58.300, 85.000),
 
-                                new Pose(16.000, 84.000)
+                                new Pose(18.000, 84.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 

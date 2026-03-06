@@ -228,8 +228,8 @@ public class Turret extends SubsystemBase {
     }
 
     public static double normalizeAngleTurret(double angleRadians) {
-        double minRad = Math.toRadians(-150);
-        double maxRad = Math.toRadians(180);
+        double minRad = Math.toRadians(-135);
+        double maxRad = Math.toRadians(135);
         double range = maxRad - minRad; // 360 degrees in radians
         double angle = angleRadians - minRad;
         angle = angle % range;

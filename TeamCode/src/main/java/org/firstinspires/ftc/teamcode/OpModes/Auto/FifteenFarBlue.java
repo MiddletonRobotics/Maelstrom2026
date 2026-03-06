@@ -39,7 +39,7 @@ public class FifteenFarBlue extends CommandOpMode
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.shooter.setHood(0.3)),
-                        new InstantCommand(() -> robot.turret.setTempOffset(-68)),
+                        new InstantCommand(() -> robot.turret.setTempOffset(-67)),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
