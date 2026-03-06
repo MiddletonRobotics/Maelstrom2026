@@ -147,11 +147,18 @@ public class Turret extends SubsystemBase {
         double angleToTargetFromCenter = Math.atan2(targetPose.getY() - robotPose.getY(),
                 targetPose.getX() - robotPose.getX());
         telemetry.addData("Atan: ", Math.toDegrees(angleToTargetFromCenter));
-        double robotAngleDiff = normalizeAngleTurret(angleToTargetFromCenter - robotPose.getHeading());
+        double robotHeading= convertHeading(robotPose.getHeading());
+        double robotAngleDiff = normalizeAngleTurret(angleToTargetFromCenter - robotHeading);
         telemetry.addData("RobotAngleDiff: ", Math.toDegrees(robotAngleDiff));
-        robotAngleDiff = Math.max(Math.min(robotAngleDiff, Math.toRadians(180)), Math.toRadians(-150));
+        robotAngleDiff = Math.max(Math.min(robotAngleDiff, Math.toRadians(135)), Math.toRadians(-135));
         targetPoseAngle = Math.toDegrees(robotAngleDiff);
     }
+
+    private double convertHeading(double heading)
+    {
+       return heading < 0 ? heading + (2 * Math.PI) : heading;
+    }
+
 
 
     public void setManualAngle(double angle) {

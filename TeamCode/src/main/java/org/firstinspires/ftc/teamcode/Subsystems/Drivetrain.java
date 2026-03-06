@@ -135,6 +135,7 @@ public class Drivetrain extends SubsystemBase {
         telemetry.addData("Drivetrain Pose X", follower.getPose().getX());
         telemetry.addData("Drivetrain Pose Y", follower.getPose().getY());
         telemetry.addData("Drivetrain Heading", follower.getPose().getHeading());
+        telemetry.addData("Converted Heading: ", convertHeading(follower.getPose().getHeading()));
         telemetry.addData("Fused X: ", fusedPose.getX());
         telemetry.addData("Fused Y: ", fusedPose.getY());
         telemetry.addData("Odo Distance: ", distance);
@@ -328,6 +329,11 @@ public class Drivetrain extends SubsystemBase {
             TurretConstants.compensatedRedGoal = compensatedGoal;
             TurretConstants.compensatedBlueGoal = blueGoal;
         }
+    }
+
+    private double convertHeading(double heading)
+    {
+        return heading < 0 ? heading + (2 * Math.PI) : heading;
     }
 
     private static class KalmanFilter {

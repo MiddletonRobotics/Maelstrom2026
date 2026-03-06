@@ -44,7 +44,7 @@ public class TwelveBallRedLine {
                         new BezierLine(
                                 new Pose(43.417, 60.000).mirror(),
 
-                                new Pose(10.000, 59.288).mirror()
+                                new Pose(11.000, 59.288).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 
@@ -52,7 +52,7 @@ public class TwelveBallRedLine {
 
         Gate = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(10.000, 59.288).mirror(),
+                                new Pose(11.000, 59.288).mirror(),
 
                                 new Pose(28.723, 60.731).mirror()
                         )
