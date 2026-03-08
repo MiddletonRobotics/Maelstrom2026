@@ -77,7 +77,7 @@ public class TwelveBallBlueV2 extends CommandOpMode
                                 new FollowPath(robot,paths.Pickup32,true,0.9).withTimeout(3000),
                                 new WaitCommand(250),
                                 new InstantCommand(() -> robot.intake.spinIn()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(-30)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(-29)),
                                 new FollowPathCommand(follower,paths.Return3,true),
                                 new ShootCommandV2(robot),
                                 new ParallelCommandGroup(

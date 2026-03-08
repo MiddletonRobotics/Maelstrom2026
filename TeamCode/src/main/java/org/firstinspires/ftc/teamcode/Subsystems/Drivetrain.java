@@ -140,6 +140,7 @@ public class Drivetrain extends SubsystemBase {
         telemetry.addData("Drivetrain Pose X", follower.getPose().getX());
         telemetry.addData("Drivetrain Pose Y", follower.getPose().getY());
         telemetry.addData("Drivetrain Heading", follower.getPose().getHeading());
+        telemetry.addData("Converted Heading: ", convertHeading(follower.getPose().getHeading()));
         telemetry.addData("Fused X: ", fusedPose.getX());
         telemetry.addData("Fused Y: ", fusedPose.getY());
         telemetry.addData("Odo Distance: ", distance);
@@ -357,6 +358,41 @@ public class Drivetrain extends SubsystemBase {
         } else {
             TurretConstants.compensatedRedGoal = compensatedGoal;
             TurretConstants.compensatedBlueGoal = blueGoal;
+        }
+    }
+
+    private double convertHeading(double heading)
+    {
+        return heading < 0 ? heading + (2 * Math.PI) : heading;
+    }
+
+    private static class KalmanFilter {
+        private double processNoise;
+        private double measurementNoise;
+        private double estimate;
+        private double errorCovariance;
+
+        public KalmanFilter(double processNoise, double measurementNoise) {
+            this.processNoise = processNoise;
+            this.measurementNoise = measurementNoise;
+            this.estimate = 0;
+            this.errorCovariance = 1;
+        }
+
+        public double update(double measurement, double prediction) {
+            errorCovariance += processNoise;
+            double kalmanGain = errorCovariance / (errorCovariance + measurementNoise);
+            estimate = prediction + kalmanGain * (measurement - prediction);
+            errorCovariance = (1 - kalmanGain) * errorCovariance;
+            return estimate;
+        }
+
+        public void setMeasurementNoise(double measurementNoise) {
+            this.measurementNoise = measurementNoise;
+        }
+
+        public void setProcessNoise(double processNoise) {
+            this.processNoise = processNoise;
         }
     }
 }

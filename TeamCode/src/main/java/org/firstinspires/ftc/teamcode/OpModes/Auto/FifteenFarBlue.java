@@ -43,7 +43,7 @@ public class FifteenFarBlue extends CommandOpMode
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(-70)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(-68)),
                                 new FollowPathCommand(follower,paths.Start,true)
                         ),
                         new WaitCommand(500),
